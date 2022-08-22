@@ -1,0 +1,30 @@
+<h4 *ngIf="usersList?.length==0">No users exist yet</h4>
+<button (click)="navigateToAddUserPage()">Add User</button>
+<button (click)="logOut()">logOut</button>
+
+<table datatable [dtOptions]="dtOptions"
+[dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Email</th>
+      <th>IsActive</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let list of usersList;let i=index">
+      <td>{{i+1}}</td>
+      <td>{{list?.firstName}} {{list?.lastName}}</td>
+      <td>{{list?.gender}}</td>
+      <td>{{list?.email}}</td>
+      <td>{{list?.isActive}}</td>
+      <td>
+        <button [disabled]="i===0" (click)="editUserInformation(list?._id)">Edit</button>
+        <button [disabled]="i===0" (click)="deleteUser(list?._id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+  </table>
