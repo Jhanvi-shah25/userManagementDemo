@@ -1,0 +1,43 @@
+<app-header></app-header>
+<h4 *ngIf="usersList?.length==0">No users exist yet</h4>
+<button type="button" class="btn btn-primary" style="margin-top: 15px; margin-left: 90%;" (click)="navigateToAddUserPage()">Add new</button>
+<!-- <button (click)="logOut()">logOut</button> -->
+<br><br>
+<table datatable [dtOptions]="dtOptions"
+[dtTrigger]="dtTrigger" class="table align-middle mb-0 bg-white">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Email</th>
+      <th>IsActive</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let list of usersList;let i=index">
+      <!--For Profile Pictue-->
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="../../../assets/Images/profile1.webp" class="rounded-circle"/>
+          <div class="ms-3">
+            <p class="fw-bold mb-1">{{list?.firstName}} {{list?.lastName}}</p>
+          </div>
+        </div>
+      </td>
+      <td>
+        <p class="fw-normal mb-1">{{list?.gender}}</p>
+      </td>
+      <td>
+        <p class="text-muted mb-0">{{list?.email}}</p>
+      </td>
+      <td>
+        <span>{{list?.isActive}}</span>
+      </td>
+      <td>
+        <button type="button" class="btn btn-link btn-sm" [disabled]="i===0" (click)="editUserInformation(list?._id)">Edit</button>
+        <button type="button" class="btn btn-link btn-sm" [disabled]="i===0" (click)="deleteUser(list?._id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+  </table>

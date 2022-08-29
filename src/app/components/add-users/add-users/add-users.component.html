@@ -1,0 +1,209 @@
+<app-header></app-header>
+<section class="">
+  <div
+    class="px-4 py-5 px-md-5 text-center text-lg-start"
+    style="background-color: hsl(0, 0%, 96%)">
+    <div class="container">
+      <div class="row gx-lg-5 align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="my-5 display-3 fw-bold ls-tight">
+            <span class="text-primary">Please add users!</span>
+          </h1>
+          <p style="color: hsl(217, 10%, 50.8%)">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
+            itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
+            at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
+            aliquid ipsum atque?
+          </p>
+        </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="card">
+            <div class="card-body py-5 px-md-5">
+              <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+                <img src="{{url}}" width="100"
+                height="100"
+                class="rounded-circle" > <br/>
+                <!-- <img class="hoverable" *ngIf="!this.url"
+                              [src]="url ? url : '../../../../assets/Images/image-upload-photo.svg'"> -->
+                <input type='file' [ngClass]="{'image-hide' : url}" (change)="onSelectFile1($event)"  accept="image/png, image/jpeg"/>
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="firstName">First name</label>
+                      <input type="text" id="firstName" formControlName="firstName" class="form-control"
+                         [class.is-invalid]="
+                          form.firstName.touched && form.firstName.invalid"/>
+                    </div>
+                    <!--For firstname validation-->
+                    <div *ngIf="form.firstName.invalid && (form.firstName.dirty || form.firstName.touched)">
+                      <span [ngClass]="{'field-validation-red' : form.firstName.errors?.['required']}">
+                        Firstname is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="lastName">Last name</label>
+                      <input type="text" formControlName="lastName" id="lastName" class="form-control" [class.is-invalid]="form.lastName.touched && form.lastName.invalid"/>
+                    </div>
+
+                    <!--For lastname validation-->
+                    <div *ngIf="form.lastName.invalid && (form.lastName.dirty || form.lastName.touched)">
+                      <span [ngClass]="{'field-validation-red' : form.lastName.errors?.['required']}" >
+                        lastname is required
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="email">Email address</label>
+                  <input type="email" id="email" formControlName="email" class="form-control" [class.is-invalid]="form.email.touched && form.email.invalid"/>
+
+                  <!--For email validation-->
+                  <div *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)">
+                    <span [ngClass]="{'field-validation-red' : form.email.errors?.['required']}">
+                      email is required
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="password">Password</label>
+                  <input type="password" id="password" class="form-control" formControlName="password" 
+                  [class.is-invalid]="form.password.touched && form.password.invalid "/>
+
+                  <!--For password validation-->
+                  <div *ngIf="form.password.invalid && (form.password.dirty || form.password.touched)">
+                    <span [ngClass]="{'field-validation-red' : form.password.errors?.['required']}">
+                      password is required
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="gender">Gender</label> <br />
+                  <input type="radio" value="male" formControlName="gender" id="male" 
+                  [class.is-invalid]="   form.gender.touched && form.gender.invalid "/>
+                  Male
+                  <input type="radio" value="female" formControlName="gender" id="female"
+                    [class.is-invalid]="form.gender.touched && form.gender.invalid"/>
+                  Female
+
+                  <!--For gender validation-->
+                  <div *ngIf="form.gender.invalid && (form.gender.dirty || form.gender.touched)">
+                    <span [ngClass]="{'field-validation-red' : form.gender.errors?.['required']}">
+                      gender is required
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                  Add User
+                </button>
+                &nbsp;
+                <button [routerLink]="['/dashboard']" type="submit" class="btn btn-danger btn-block mb-4" >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!--ref-->
+<!-- 
+<div class="upload">
+  <div class="upload-pic form-group">
+      <label for="fileInput" id="addInstitutionUploadBankLogo1">
+          <img class="hoverable" *ngIf="this.isImg == true && this.url !=''"
+              [src]="this.url | profileImg | async">
+          <img class="hoverable" *ngIf="!this.url"
+              [src]="url ? url : '../../../../assets/images/image-upload-photo.svg'">
+
+          <span *ngIf="this.isImg == false && this.url !=''">{{this.url}}</span>
+
+      </label>
+      <a class="upload-pic-text"><span><label class="label-upload-pic" for="fileInput" id="addInstitutionUploadBankLogo2">
+              </label></span>
+    
+      </a>
+      <img class="no-profile" *ngIf="this.isImg==true" (click)="delete()"
+          src="../../../../assets/images/cancel-profile.svg">
+      <br />
+      <input type="file" id="fileInput" accept="image/png, image/jpeg" type='file'
+          (change)="onSelectFile($event)" style="display: none;">
+  </div>
+</div> -->
+
+
+<!--change pass-->
+
+<!-- <ng-template #changePassword>
+  <div class="modal-change-password">
+    <div class="modal-header">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeChangePassword()" id="crPricingClose2">
+        <span aria-hidden="true"><img src="../../../assets/images/modal-close.png" id="editProfileClose"></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit();">
+        <h1>Change Password</h1>
+        <div class="password-fields">
+
+          <div class="old-password form-group">
+            <label>Old Password</label><span *ngIf="submitted && form.oldPassword.invalid" class="text-danger">*</span>
+            <input type="password" class="form-control input-pass" formControlName="oldPassword" id="oldPassword"
+              [ngClass]="{ 'is-invalid': submitted && form.oldPassword.errors }">
+          </div>
+          <div class="new-password form-group">
+            <div fxFlex class="show-pass-info form-group">
+              
+              <label>New Password</label> <span *ngIf="submitted && form.newPassword .invalid"
+                class="text-danger">*</span>
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-pass-toggle-visibility #toggle matSuffix></mat-pass-toggle-visibility>
+                <input matInput #password [type]="toggle.type" required (focus)="showInfo = true"
+                  (blur)="showInfo = false" formControlName="newPassword"
+                  [ngClass]="{ 'is-invalid': submitted && form.reEnterNewPassword.invalid }">
+                <mat-hint align="end" aria-live="polite">
+                  {{password.value.length}} / {{passwordComponent.max}}
+                </mat-hint>
+              </mat-form-field>
+              <mat-password-strength #passwordComponent
+                [password]="password.value">
+              </mat-password-strength>
+            </div>
+          </div>
+          <div class="re-enter-password form-group">
+            <label>Re-enter New Password</label><span *ngIf="submitted && form.reEnterNewPassword.invalid"
+              class="text-danger">*</span>
+            <input type="password" class="form-control input-pass" formControlName="reEnterNewPassword"
+              id="reEnterNewPassword" [ngClass]="{ 'is-invalid': submitted && form.reEnterNewPassword.errors }">
+          </div>
+        </div>
+        <div class="mt-4 text-center form-group">
+          <button type="submit" id="editProfileSave" class="yes-them-btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="show-pass-info" *ngIf="showInfo">
+    <mat-password-strength-info lowerCaseCriteriaMsg="contains at least one lower case character"
+      upperCaseCriteriaMsg="contains at least one upper case character" digitsCriteriaMsg="contains at least one digit"
+      specialCharsCriteriaMsg="contains at least one special character"
+      minCharsCriteriaMsg="contains at least 8 characters" [passwordComponent]="passwordComponent">
+    </mat-password-strength-info>
+  </div>
+</ng-template> -->

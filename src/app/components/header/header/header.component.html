@@ -1,0 +1,38 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+  <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbar-list-4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbar-list-4">
+    <ul class="navbar-nav" style="margin-top: 10px;">
+      <li class="nav-item" [routerLink]="['/dashboard']" routerLinkActive="active" style="cursor: pointer;">
+        <a class="nav-link">Home</a>
+      </li>
+      <li class="nav-item" [routerLink]="['/taskDashboard']" routerLinkActive="active" style="cursor: pointer;">
+        <a class="nav-link">Task</a>
+      </li>
+    </ul>
+  </div>
+  <div class="navbar-person-image" [matMenuTriggerFor]="beforeMenu" id="AdminPersonImage">
+    <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+    width="40"
+    height="40"
+    class="rounded-circle" [alt]="" style="cursor: pointer;">
+    <!-- <span class="profile-null" *ngIf="this.url ==''">{{ this.authDetail['profile']}}</span> -->
+
+    <mat-menu #beforeMenu="matMenu" xPosition="before" class="dashboard-mat-menu">
+      <button mat-menu-item id="AdminEditProfile"><img
+          class="img-before-mat-option" src="../../../../assets/Images/edit-icon.svg"><span
+          class="admin-edit-profile">Edit
+          Profile</span></button>
+      <hr>
+      <button mat-menu-item  id="AdminChangePassword"><img
+          class="img-before-mat-option" src="../../../../assets/Images/icon-change-password.svg"><span
+          class="admin-edit-profile">Change
+          Password</span></button>
+      <hr>
+      <button mat-menu-item (click)="logOut()" id="AdminSignOut"><img class="img-before-mat-option"
+          src="../../../../assets/Images/icon-signout.svg"><span class="admin-edit-profile text-color">Sign
+          Out</span></button>
+    </mat-menu>
+  </div>
+</nav>

@@ -1,0 +1,46 @@
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-secondary text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="typeEmailX">Email</label>
+                  <input formControlName="email"
+                  [class.is-invalid]="emailField.touched && emailField.invalid"
+                  type="email" id="id_email" class="form-control form-control-lg"/>
+                  <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)"class="alert">
+                    <div [ngClass]="{'field-validation-red' : emailField.errors?.['required']}">
+                      email is required
+                    </div>  
+                  </div>
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="typePasswordX">Password</label>
+                  <input formControlName="password" [class.is-invalid]="passwordField.touched && passwordField.invalid"
+                  type="password" id="id_Password" class="form-control form-control-lg" />
+                  <div *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)"class="alert">
+                    <div [ngClass]="{'field-validation-red' : passwordField.errors?.['required']}">
+                      password is required
+                    </div>  
+                  </div>
+                </div>
+  
+                <button class="btn btn-outline-dark btn-lg px-5" type="submit">Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
