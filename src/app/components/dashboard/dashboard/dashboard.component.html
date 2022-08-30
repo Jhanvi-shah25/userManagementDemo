@@ -1,8 +1,10 @@
 <app-header></app-header>
+
 <h4 *ngIf="usersList?.length==0">No users exist yet</h4>
+
 <button type="button" class="btn btn-primary" style="margin-top: 15px; margin-left: 90%;" (click)="navigateToAddUserPage()">Add new</button>
-<!-- <button (click)="logOut()">logOut</button> -->
 <br><br>
+
 <table datatable [dtOptions]="dtOptions"
 [dtTrigger]="dtTrigger" class="table align-middle mb-0 bg-white">
   <thead>
@@ -19,7 +21,14 @@
       <!--For Profile Pictue-->
       <td>
         <div class="d-flex align-items-center">
-          <img src="../../../assets/Images/profile1.webp" class="rounded-circle"/>
+          
+          <!--We have two scenarios => if user have uploaded profile,display profile picture 
+            otherwise display first letter of their first name and last name-->
+            
+          <img *ngIf="list['profileUrl']" [src]="'http://localhost:3000/users/view/'+ list['profileUrl']" class="rounded-circle"/>
+
+          <span *ngIf="!list['profileUrl']">{{list['firstName'][0] | uppercase}}{{list['lastName'][0] | uppercase}}</span>
+
           <div class="ms-3">
             <p class="fw-bold mb-1">{{list?.firstName}} {{list?.lastName}}</p>
           </div>

@@ -10,6 +10,9 @@ import { LoginComponent } from './login/login/login.component';
 import { TaskComponent } from './task/task.component';
 import { TaskDashboardComponent } from './task-dashboard/task-dashboard.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import {ModalModule} from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,9 @@ import { MatMenuModule } from '@angular/material/menu';
     HeaderComponent,
     LoginComponent,
     TaskComponent,
-    TaskDashboardComponent
+    TaskDashboardComponent,
+    ChangePasswordComponent,
+    EditProfileComponent
   ],
   imports: [
       MatMenuModule,
@@ -26,7 +31,8 @@ import { MatMenuModule } from '@angular/material/menu';
       FormsModule,
       DataTablesModule,
       BrowserAnimationsModule,
-      RouterModule
+      RouterModule,
+      ModalModule.forRoot()
   ],
 })
 export class ComponentsModule { }

@@ -21,12 +21,26 @@
           <div class="card">
             <div class="card-body py-5 px-md-5">
               <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
-                <img src="{{url}}" width="100"
-                height="100"
-                class="rounded-circle" > <br/>
-                <!-- <img class="hoverable" *ngIf="!this.url"
-                              [src]="url ? url : '../../../../assets/Images/image-upload-photo.svg'"> -->
-                <input type='file' [ngClass]="{'image-hide' : url}" (change)="onSelectFile1($event)"  accept="image/png, image/jpeg"/>
+
+                  <div class="form-group">
+                      <label for="fileInput" id="imagefileuploading">
+                          <img *ngIf="this.isImg == true && this.url !=''" width="100" height="100"
+                          class="rounded-circle" [src]="this.url">
+                          <img *ngIf="this.url=='' "
+                          [src]="url ? url : '../../../../assets/Images/image-upload-photo.svg'">
+                
+                          <span *ngIf="this.isImg == false && this.url !=''">{{this.url}}</span>
+                
+                      </label>
+
+                      <img class="no-profile" *ngIf="this.isImg==true && this.userId" (click)="delete(this.userId)" 
+                      src="../../../../assets/Images/cancel-profile.svg">
+                      <br/>
+
+                      <input type="file" id="fileInput" accept="image/png, image/jpeg" type='file'
+                          (change)="onSelectFile($event)" style="display: none;">
+                  </div>
+                
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
@@ -85,6 +99,7 @@
                   </div>
                 </div>
 
+                <!--Gender input-->
                 <div class="form-outline mb-4">
                   <label class="form-label" for="gender">Gender</label> <br />
                   <input type="radio" value="male" formControlName="gender" id="male" 
@@ -123,8 +138,8 @@
 
 
 <!--ref-->
-<!-- 
-<div class="upload">
+
+<!-- <div class="upload">
   <div class="upload-pic form-group">
       <label for="fileInput" id="addInstitutionUploadBankLogo1">
           <img class="hoverable" *ngIf="this.isImg == true && this.url !=''"
@@ -145,7 +160,7 @@
       <input type="file" id="fileInput" accept="image/png, image/jpeg" type='file'
           (change)="onSelectFile($event)" style="display: none;">
   </div>
-</div> -->
+</div>  -->
 
 
 <!--change pass-->

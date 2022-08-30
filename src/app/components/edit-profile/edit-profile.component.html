@@ -1,0 +1,109 @@
+
+<i id="editprofile" (click)="openModalEditProfile(editProfile)"></i>
+<ng-template #editProfile>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Profile</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
+           <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="editUserProfileForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="fileInput" id="imagefileuploading">
+                    <img *ngIf="this.isImg == true && this.url !=''" width="100" height="100"
+                    class="rounded-circle" [src]="this.url">
+                    <img *ngIf="this.url=='' "
+                    [src]="url ? url : '../../../../assets/Images/image-upload-photo.svg'">
+          
+                    <span *ngIf="this.isImg == false && this.url !=''">{{this.url}}</span>
+          
+                </label>
+
+                <img class="no-profile" *ngIf="this.isImg==true && this.userId" (click)="delete(this.userId)" 
+                src="../../../../assets/Images/cancel-profile.svg">
+                <br/>
+
+                <input type="file" id="fileInput" accept="image/png, image/jpeg" type='file'
+                    (change)="onSelectFile($event)" style="display: none;">
+            </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="form-outline">
+                <label class="form-label" for="firstName">First name</label>
+                <input type="text" id="firstName" formControlName="firstName" class="form-control"
+                   [class.is-invalid]="
+                    form.firstName.touched && form.firstName.invalid"/>
+              </div>
+
+              <div *ngIf="form.firstName.invalid && (form.firstName.dirty || form.firstName.touched)">
+                <span [ngClass]="{'field-validation-red' : form.firstName.errors?.['required']}">
+                  Firstname is required
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <div class="form-outline">
+                <label class="form-label" for="lastName">Last name</label>
+                <input type="text" formControlName="lastName" id="lastName" class="form-control" [class.is-invalid]="form.lastName.touched && form.lastName.invalid"/>
+              </div>
+
+              <div *ngIf="form.lastName.invalid && (form.lastName.dirty || form.lastName.touched)">
+                <span [ngClass]="{'field-validation-red' : form.lastName.errors?.['required']}" >
+                  lastname is required
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="email">Email address</label>
+            <input type="email" id="email" formControlName="email" class="form-control" [class.is-invalid]="form.email.touched && form.email.invalid"/>
+
+            <div *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)">
+              <span [ngClass]="{'field-validation-red' : form.email.errors?.['required']}">
+                email is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" class="form-control" formControlName="password" 
+            [class.is-invalid]="form.password.touched && form.password.invalid "/>
+
+            <div *ngIf="form.password.invalid && (form.password.dirty || form.password.touched)">
+              <span [ngClass]="{'field-validation-red' : form.password.errors?.['required']}">
+                password is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="gender">Gender</label> <br />
+            <input type="radio" value="male" formControlName="gender" id="male" 
+            [class.is-invalid]="   form.gender.touched && form.gender.invalid "/>
+            Male
+            <input type="radio" value="female" formControlName="gender" id="female"
+              [class.is-invalid]="form.gender.touched && form.gender.invalid"/>
+            Female
+
+            <div *ngIf="form.gender.invalid && (form.gender.dirty || form.gender.touched)">
+              <span [ngClass]="{'field-validation-red' : form.gender.errors?.['required']}">
+                gender is required
+              </span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block mb-4">
+            Add User
+          </button>
+          &nbsp;
+          <button [routerLink]="['/dashboard']" type="submit" class="btn btn-danger btn-block mb-4" >
+            Cancel
+          </button>
+        </form>
+    </div>
+</ng-template>

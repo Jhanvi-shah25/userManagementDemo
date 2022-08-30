@@ -28,7 +28,7 @@ export class ApiService {
             this.authenticationService.setAuth(data);
           }
         }),
-        retry(1),
+        retry(2),
         catchError(this.handleError.bind(this))
       )
   }
@@ -38,6 +38,7 @@ export class ApiService {
     return this.http.get(this.BASE_URL + data.path,{
       headers : this.getHeaderForFileUpload()
     , responseType: 'json'});
+    
   }
 
   handleError(error:HttpErrorResponse){

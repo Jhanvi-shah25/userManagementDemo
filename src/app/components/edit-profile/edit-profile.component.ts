@@ -1,19 +1,21 @@
-import { ThisReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService, Request } from 'src/app/services/api.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import * as $ from 'jquery';
+
 
 @Component({
-  selector: 'app-add-users',
-  templateUrl: './add-users.component.html',
-  styleUrls: ['./add-users.component.scss']
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.scss']
 })
-export class AddUsersComponent implements OnInit {
+export class EditProfileComponent implements OnInit {
 
-  addUserForm: FormGroup;
+  modalRef!: BsModalRef;
+  editUserProfileForm!: FormGroup;
   newUserData : string[] = [];
   singleUserList = {};
   url: string = "";
@@ -21,23 +23,32 @@ export class AddUsersComponent implements OnInit {
   allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
   isImg: any;
 
-  constructor( private formBuilder: FormBuilder,
+
+
+
+  constructor(private modalService : BsModalService,private formBuilder : FormBuilder,
     private router: Router,
     private activateRoute : ActivatedRoute,
     private toaster:ToastrService,
     private apiService:ApiService) {
-    this.addUserForm = this.formBuilder.group({
+    this.editUserProfileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       gender : ['',Validators.required],
       email : ['',[Validators.required,Validators.email]],
       password: ['', Validators.required],
       profileUrl : [null]
-  });
+    })
    }
 
+  openModalEditProfile(editProfile : TemplateRef<any>){
+    this.modalRef = this.modalService.show(editProfile,
+      Object.assign({} , {class: 'gray modal-lg'}))
+  }
+
   ngOnInit(): void {
-    this.getUserId();
+    $("#editprofile").click();
+    // this.getUserId();
   }
 
   getUserId(){
@@ -79,7 +90,7 @@ export class AddUsersComponent implements OnInit {
       this.url = userSingleList["profileUrl"];
     }
     console.log(this.isImg,this.url)
-    this.addUserForm.patchValue({
+    this.editUserProfileForm.patchValue({
       firstName : userSingleList.firstName,
       lastName : userSingleList.lastName,
       gender : userSingleList.gender,
@@ -91,20 +102,20 @@ export class AddUsersComponent implements OnInit {
 
 
   onSubmit(){
-    console.log(this.addUserForm.controls,this.addUserForm.value,this.url,'llll',this.addUserForm.value.profileUrl)
-    if(!this.addUserForm.valid){
+    console.log(this.editUserProfileForm.controls,this.editUserProfileForm.value,this.url,'llll',this.editUserProfileForm.value.profileUrl)
+    if(!this.editUserProfileForm.valid){
       this.toaster.error('Please fill required fields');
     }
     else{
       let request : any = {};
       let objData = {
-        "firstName" : this.addUserForm.value.firstName,
-        "lastName" : this.addUserForm.value.lastName,
-        "gender" : this.addUserForm.value.gender,
-        "email" : this.addUserForm.value.email,
-        "password" : this.addUserForm.value.password,
+        "firstName" : this.editUserProfileForm.value.firstName,
+        "lastName" : this.editUserProfileForm.value.lastName,
+        "gender" : this.editUserProfileForm.value.gender,
+        "email" : this.editUserProfileForm.value.email,
+        "password" : this.editUserProfileForm.value.password,
         "isActive" : true,
-        "profileUrl" : this.addUserForm.value.profileUrl
+        "profileUrl" : this.editUserProfileForm.value.profileUrl
       }
       if(!this.userId){
         request = {
@@ -132,30 +143,34 @@ export class AddUsersComponent implements OnInit {
   }
 
   get form(){
-    return this.addUserForm.controls;
+    return this.editUserProfileForm.controls;
   }
 
   onUpload(file:string) {
-    this.apiService.upload(file).subscribe(
-        (res: any) => {
-            if (typeof (res) === 'object' && res["status"]["code"]==='OK') {
-                this.url = res["data"]["filename"];
-                this.addUserForm.patchValue({
-                      profileUrl: res["data"]["filename"]
-                })
-                this.isImg = true;
-                if(this.isImg){
-                  this.url = "http://localhost:3000/users/view/" + this.addUserForm.value.profileUrl
-                }
-                else{
-                  this.url = "";
-                }
-                this.toaster.success(res["status"]["message"]);
-            }else{
-              this.toaster.error('Invalid');
-            }
+    this.apiService.upload(file).subscribe((res: any) => {
+      if (typeof (res) === 'object' && res["status"]["code"]==='OK') 
+      {
+        this.url = res["data"]["filename"];
+        this.editUserProfileForm.patchValue(
+          {
+            profileUrl: res["data"]["filename"]
+          })
+        this.isImg = true;
+        if(this.isImg)
+        {
+          this.url = "http://localhost:3000/users/view/" + this.editUserProfileForm.value.profileUrl
+        }
+        else
+        {
+          this.url = "";
+        }
+        this.toaster.success(res["status"]["message"]);
       }
-    );
+      else
+      {
+        this.toaster.error('Invalid');
+      }
+    });
   }
 
   getUploadPhoto(){
@@ -193,16 +208,16 @@ export class AddUsersComponent implements OnInit {
       if(response["statusCode"] === 200){
         this.isImg = false;
         this.url = "";
-        this.addUserForm.value.profileUrl = "";
+        this.editUserProfileForm.value.profileUrl = "";
         this.toaster.success(response["message"]);
       }else{
         this.toaster.error("Invalid url");
       }
     })
   }
-
+  cancel(){
+    this.modalRef.hide();
+    this.editUserProfileForm.reset();
+    this.router.navigate(['/dashboard']);
+  }
 }
-
-
-
-

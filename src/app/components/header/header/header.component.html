@@ -20,12 +20,12 @@
     <!-- <span class="profile-null" *ngIf="this.url ==''">{{ this.authDetail['profile']}}</span> -->
 
     <mat-menu #beforeMenu="matMenu" xPosition="before" class="dashboard-mat-menu">
-      <button mat-menu-item id="AdminEditProfile"><img
+      <button mat-menu-item [routerLink]="['/edit-profile']" id="AdminEditProfile"><img
           class="img-before-mat-option" src="../../../../assets/Images/edit-icon.svg"><span
           class="admin-edit-profile">Edit
           Profile</span></button>
       <hr>
-      <button mat-menu-item  id="AdminChangePassword"><img
+      <button mat-menu-item [routerLink]="['/change-password']" id="AdminChangePassword"><img
           class="img-before-mat-option" src="../../../../assets/Images/icon-change-password.svg"><span
           class="admin-edit-profile">Change
           Password</span></button>

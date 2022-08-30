@@ -15,6 +15,9 @@ export class DashboardComponent implements OnInit {
   usersList : any = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
+  isImg : boolean = false;
+  url: string = "";
 
   constructor(private apiService:ApiService,private toaster : ToastrService,private router : Router,private authenticationService:AuthenticationService) { }
 
@@ -37,6 +40,7 @@ export class DashboardComponent implements OnInit {
     }
     this.apiService.get(request).subscribe((response:any)=>{
       this.usersList = response;
+      console.log(this.usersList)
       this.dtTrigger.next('');
     })
   }
