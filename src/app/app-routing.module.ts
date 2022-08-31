@@ -7,6 +7,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 import { LoginComponent } from './components/login/login/login.component';
 import { TaskDashboardComponent } from './components/task-dashboard/task-dashboard.component';
 import { TaskComponent } from './components/task/task.component';
+import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
 import { AuthguardGuard } from './guards/authguard.guard';
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path:'addTask',component:TaskComponent},
   {path:'addTask/:id',component:TaskComponent},
   {path:'change-password',component:ChangePasswordComponent},
-  {path:'edit-profile',component:EditProfileComponent}
+  {path:'edit-profile',component:EditProfileComponent},
+  {path:'user-dashboard',component:UserDashboardComponent}
 ];
 
 @NgModule({

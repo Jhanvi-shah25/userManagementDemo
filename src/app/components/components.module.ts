@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {ModalModule} from 'ngx-bootstrap/modal';
     TaskComponent,
     TaskDashboardComponent,
     ChangePasswordComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UserDashboardComponent
   ],
   imports: [
       MatMenuModule,

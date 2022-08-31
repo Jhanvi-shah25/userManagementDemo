@@ -10,11 +10,13 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent {
   title = 'testProject';
+  admin : boolean = false;
 
   constructor(
     private router: Router,
     private authService: AuthenticationService,
   ) {
+    console.log('see',this.authService.data,this.authService['data'],this.authService['data']['authDetail'])
     if (this.authService.isLoggedIn() === true) {
       this.router.navigate(["/dashboard"]);
     }else{

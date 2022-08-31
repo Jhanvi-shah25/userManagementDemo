@@ -104,7 +104,8 @@ export class AddUsersComponent implements OnInit {
         "email" : this.addUserForm.value.email,
         "password" : this.addUserForm.value.password,
         "isActive" : true,
-        "profileUrl" : this.addUserForm.value.profileUrl
+        "profileUrl" : this.addUserForm.value.profileUrl,
+        "type" : "User"
       }
       if(!this.userId){
         request = {
