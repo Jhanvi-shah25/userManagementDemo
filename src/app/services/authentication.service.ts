@@ -37,6 +37,7 @@ export class AuthenticationService {
   }
 
   setAuth(data:AuthData){
+    console.log('auth',data)
     this.data = data;
     localStorage.removeItem(AUTH);
     this.encrypt = this.encryptionService.encrypt(JSON.stringify(data))

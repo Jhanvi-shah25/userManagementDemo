@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class LoginComponent implements OnInit {
 
   loginForm : FormGroup;
+  currentRole: any;
 
   constructor(
     private router : Router,
@@ -44,10 +45,23 @@ export class LoginComponent implements OnInit {
         }
       }
       this.apiService.post(request).subscribe((response:any)=>{
+        console.log('new',response)
         if(response["accessToken"]){
           localStorage.setItem('token',response["accessToken"]);
-          this.authentication.data.token = response["accessToken"];
-          this.router.navigate(['/dashboard']);
+          // this.authentication.data.token = response["accessToken"];
+          let data :any = {};
+          this.currentRole = response["type"][0]
+          console.log(this.currentRole,'current role')
+          data["authDetail"] = response;
+          data["token"] = response["accessToken"];
+
+          this.authentication.setAuth(data);
+          if(this.currentRole === 'Admin'){
+            this.router.navigate(['/dashboard']);
+          }else{
+            this.router.navigate(['/user-dashboard']);
+          }
+          
           this.toaster.success('Login successfully');
         }
         else{
