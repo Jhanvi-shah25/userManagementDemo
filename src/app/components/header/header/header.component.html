@@ -2,7 +2,9 @@
   <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbar-list-4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbar-list-4">
+
+  <!--For admin-->
+  <div *ngIf="admin" class="collapse navbar-collapse" id="navbar-list-4">
     <ul class="navbar-nav" style="margin-top: 10px;">
       <li class="nav-item" [routerLink]="['/dashboard']" routerLinkActive="active" style="cursor: pointer;">
         <a class="nav-link">Home</a>
@@ -12,8 +14,25 @@
       </li>
     </ul>
   </div>
+
+  <!--For user-->
+  <div *ngIf="!admin" class="collapse navbar-collapse" id="navbar-list-4">
+    <ul class="navbar-nav" style="margin-top: 10px;">
+      <li class="nav-item"  routerLinkActive="active" style="cursor: pointer;">
+        <a class="nav-link">Home</a>
+      </li>
+      <li class="nav-item"  routerLinkActive="active" style="cursor: pointer;">
+        <a class="nav-link">Task</a>
+      </li>
+    </ul>
+  </div>
+
+
+
+
+  <!--For both-->
   <div class="navbar-person-image" [matMenuTriggerFor]="beforeMenu" id="AdminPersonImage">
-    <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+    <img [src]="profileUrl"
     width="40"
     height="40"
     class="rounded-circle" [alt]="" style="cursor: pointer;">

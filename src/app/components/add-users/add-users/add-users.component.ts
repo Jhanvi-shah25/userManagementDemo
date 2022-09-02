@@ -64,9 +64,13 @@ export class AddUsersComponent implements OnInit {
   }
 
   editUserField(userSingleList : any){
-    console.log('user single list',userSingleList)
-    if(userSingleList["profileUrl"]){
+    console.log('user single list',userSingleList,userSingleList["profileUrl"])
+    let s = new String(userSingleList["profileUrl"]);
+    if(userSingleList["profileUrl"]!=null && s.length >=3){
       this.isImg = true;
+    }
+    else{
+      this.isImg = false;
     }
     if(!userSingleList["profileUrl"]){
       this.isImg = false;
@@ -78,20 +82,20 @@ export class AddUsersComponent implements OnInit {
     else{
       this.url = userSingleList["profileUrl"];
     }
-    console.log(this.isImg,this.url)
+    console.log(this.isImg,this.url,userSingleList.profileUrl)
     this.addUserForm.patchValue({
       firstName : userSingleList.firstName,
       lastName : userSingleList.lastName,
       gender : userSingleList.gender,
       email : userSingleList.email,
       password : userSingleList.password,
-      profileUrl : this.url
+      profileUrl : userSingleList.profileUrl
     })
   }
 
 
   onSubmit(){
-    console.log(this.addUserForm.controls,this.addUserForm.value,this.url,'llll',this.addUserForm.value.profileUrl)
+    console.log(this.url,'llll',this.addUserForm.value.profileUrl)
     if(!this.addUserForm.valid){
       this.toaster.error('Please fill required fields');
     }
@@ -121,12 +125,12 @@ export class AddUsersComponent implements OnInit {
       }
       this.apiService.post(request).subscribe((response:any)=>{
         console.log('response',response);
-        if(response["statusCode"] === 201 || response["statusCode"] === 200){
-          this.toaster.success(response["message"]);
+        if(response["status"]["statusCode"] === 201 || response["status"]["statusCode"] === 200){
+          this.toaster.success(response["status"]["message"]);
           this.router.navigate(['/dashboard']);
         }
         else{
-          this.toaster.error(response["message"]);
+          this.toaster.error("Invalid credentials!");
         }
       })
     }
@@ -149,7 +153,7 @@ export class AddUsersComponent implements OnInit {
                   this.url = "http://localhost:3000/users/view/" + this.addUserForm.value.profileUrl
                 }
                 else{
-                  this.url = "";
+                  this.url = "";  
                 }
                 this.toaster.success(res["status"]["message"]);
             }else{

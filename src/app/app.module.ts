@@ -11,6 +11,7 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ApiService } from './services/api.service';
 import { ComponentsModule } from './components/components.module';
 import { RouterModule } from '@angular/router';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -26,7 +27,9 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     DataTablesModule,
     BrowserAnimationsModule,
+    RouterModule,
     ToastrModule.forRoot(),
+    DragDropModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

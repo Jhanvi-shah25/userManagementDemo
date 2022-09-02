@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -14,6 +14,10 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { AssigntaskComponent } from './assigntask/assigntask.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatCardModule }  from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +29,8 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     TaskDashboardComponent,
     ChangePasswordComponent,
     EditProfileComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    AssigntaskComponent,
   ],
   imports: [
       MatMenuModule,
@@ -33,8 +38,12 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
       FormsModule,
       DataTablesModule,
       BrowserAnimationsModule,
+      DragDropModule,
+      BrowserAnimationsModule,
       RouterModule,
+      MatCardModule,
       ModalModule.forRoot()
   ],
+  schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ComponentsModule { }

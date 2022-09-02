@@ -37,7 +37,7 @@ export class AuthenticationService {
   }
 
   setAuth(data:AuthData){
-    console.log('auth',data)
+    console.log('set auth data',data)
     this.data = data;
     localStorage.removeItem(AUTH);
     this.encrypt = this.encryptionService.encrypt(JSON.stringify(data))
@@ -52,7 +52,6 @@ export class AuthenticationService {
       let decrypt = this.encryptionService.decrypt(localStorage.getItem(AUTH) || '{}');
       this.data =JSON.parse(decrypt);
     }
-    console.log('from authhii',this.data)
     return this.isLoggedIn();
   }
 

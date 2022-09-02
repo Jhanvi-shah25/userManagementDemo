@@ -8,12 +8,21 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class AuthguardGuard implements CanActivate {
 
-  constructor(private authenticationService : AuthenticationService,private router : Router){}
+  admin :any;
+  constructor(private authenticationService : AuthenticationService,private router : Router){
+
+  }
 
   //Check user is authenticated or not
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      // console.log('in auth guard',this.authenticationService.data,this.authenticationService['data'],this.authenticationService['data']['authDetail'])
+      // if(this.authenticationService['data']['authDetail']['type'][0] === 'Admin'){
+      //   this.admin = true;
+      // }else{
+      //   this.admin = false;
+      // }
       if(!this.authenticationService.isAuthenticated()){
         this.router.navigate(['/']);
         return false;

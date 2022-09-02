@@ -18,8 +18,16 @@ export class DashboardComponent implements OnInit {
   allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
   isImg : boolean = false;
   url: string = "";
+  admin :boolean = false;
 
-  constructor(private apiService:ApiService,private toaster : ToastrService,private router : Router,private authenticationService:AuthenticationService) { }
+  constructor(private authService : AuthenticationService,private apiService:ApiService,private toaster : ToastrService,private router : Router,private authenticationService:AuthenticationService) { 
+    if (this.authService['data']['authDetail'] && this.authService['data']['authDetail']['type'][0] === 'Admin') {
+      this.admin = true;
+    }
+    else{
+      this.admin =false;
+    }
+  }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -41,6 +49,9 @@ export class DashboardComponent implements OnInit {
     this.apiService.get(request).subscribe((response:any)=>{
       this.usersList = response;
       console.log(this.usersList)
+      // this.usersList.forEach((demo:any)=>{
+
+      // })
       this.dtTrigger.next('');
     })
   }

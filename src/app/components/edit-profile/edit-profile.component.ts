@@ -5,6 +5,7 @@ import { BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService, Request } from 'src/app/services/api.service';
 import * as $ from 'jquery';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 
 @Component({
@@ -22,6 +23,10 @@ export class EditProfileComponent implements OnInit {
   userId : string = "";
   allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
   isImg: any;
+  currentUser : any;
+  admin:boolean = false;
+  token : string ="";
+  currentRole : string =""
 
 
 
@@ -30,7 +35,8 @@ export class EditProfileComponent implements OnInit {
     private router: Router,
     private activateRoute : ActivatedRoute,
     private toaster:ToastrService,
-    private apiService:ApiService) {
+    private apiService:ApiService,
+    private authService : AuthenticationService) {
     this.editUserProfileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -39,6 +45,13 @@ export class EditProfileComponent implements OnInit {
       password: ['', Validators.required],
       profileUrl : [null]
     })
+
+    if (this.authService['data']['authDetail'] && this.authService['data']['authDetail']['type'][0] === 'Admin') {
+      this.admin = true;
+    }
+    else{
+      this.admin =false;
+    }
    }
 
   openModalEditProfile(editProfile : TemplateRef<any>){
@@ -47,20 +60,16 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCurrentUser();
     $("#editprofile").click();
     // this.getUserId();
   }
 
-  getUserId(){
-    this.activateRoute.paramMap.subscribe((data : Params)=>{
-      if(data['params'].id){
-        this.userId = data["params"].id;
-        this.getsingleUserList(this.userId);
-      }
-      else{
-        this.userId = "";
-      }
-    })
+  getCurrentUser(){
+    this.currentUser = this.authService.getAuthDetail()["authDetail"];
+    this.userId = this.currentUser["_id"];
+    console.log(this.userId)
+    this.getsingleUserList(this.userId);
   }
 
   getsingleUserList(userId : string){
@@ -76,8 +85,11 @@ export class EditProfileComponent implements OnInit {
 
   editUserField(userSingleList : any){
     console.log('user single list',userSingleList)
-    if(userSingleList["profileUrl"]){
+    let s = new String(userSingleList["profileUrl"]);
+    if(userSingleList["profileUrl"]!=null && s.length >=3){
       this.isImg = true;
+    }else{
+      this.isImg = false;
     }
     if(!userSingleList["profileUrl"]){
       this.isImg = false;
@@ -96,13 +108,13 @@ export class EditProfileComponent implements OnInit {
       gender : userSingleList.gender,
       email : userSingleList.email,
       password : userSingleList.password,
-      profileUrl : this.url
+      profileUrl : userSingleList.profileUrl
     })
   }
 
 
   onSubmit(){
-    console.log(this.editUserProfileForm.controls,this.editUserProfileForm.value,this.url,'llll',this.editUserProfileForm.value.profileUrl)
+    console.log('lll1111',this.editUserProfileForm.controls,this.editUserProfileForm.value,this.url,'llll',this.editUserProfileForm.value.profileUrl)
     if(!this.editUserProfileForm.valid){
       this.toaster.error('Please fill required fields');
     }
@@ -117,26 +129,27 @@ export class EditProfileComponent implements OnInit {
         "isActive" : true,
         "profileUrl" : this.editUserProfileForm.value.profileUrl
       }
-      if(!this.userId){
-        request = {
-          path : 'users/create',
-          data : objData
-        }
-      }
-      else{
         request = {
           path : 'users/update/' + this.userId,
           data :objData
         }
-      }
       this.apiService.post(request).subscribe((response:any)=>{
         console.log('response',response);
-        if(response["statusCode"] === 201 || response["statusCode"] === 200){
-          this.toaster.success(response["message"]);
-          this.router.navigate(['/dashboard']);
+        if(response["status"]["statusCode"] === 200){
+          this.toaster.success(response["status"]["message"]);
+          let data = this.authService.getAuthDetail();
+          data["authDetail"]["profileUrl"] = response["data"]["profileUrl"];
+          this.authService.setAuth(data);
+          console.log(data,'data from edit prof',data["authDetail"]["profileUrl"])
+          this.modalRef.hide();
+          if(this.admin){
+            this.router.navigate(['/dashboard']);
+          }else{
+            this.router.navigate(['/user-dashboard']);
+          }
         }
         else{
-          this.toaster.error(response["message"]);
+          this.toaster.error(response["status"]["message"]);
         }
       })
     }
@@ -218,6 +231,12 @@ export class EditProfileComponent implements OnInit {
   cancel(){
     this.modalRef.hide();
     this.editUserProfileForm.reset();
-    this.router.navigate(['/dashboard']);
+    if(this.admin)
+    {
+      this.router.navigate(['/dashboard']);
+    }
+    else{
+      this.router.navigate(['/user-dashboard']);
+    }
   }
 }

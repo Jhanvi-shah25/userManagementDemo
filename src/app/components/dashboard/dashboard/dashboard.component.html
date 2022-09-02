@@ -44,8 +44,8 @@
         <span>{{list?.isActive}}</span>
       </td>
       <td>
-        <button type="button" class="btn btn-link btn-sm" [disabled]="i===0" (click)="editUserInformation(list?._id)">Edit</button>
-        <button type="button" class="btn btn-link btn-sm" [disabled]="i===0" (click)="deleteUser(list?._id)">Delete</button>
+        <button type="button" class="btn btn-link btn-sm"  (click)="editUserInformation(list?._id)">Edit</button>
+        <button type="button" class="btn btn-link btn-sm" (click)="deleteUser(list?._id)">Delete</button>
       </td>
     </tr>
   </tbody>

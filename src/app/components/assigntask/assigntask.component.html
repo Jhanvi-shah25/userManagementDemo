@@ -1,0 +1,108 @@
+<app-header></app-header>
+
+
+<!--task list-->
+  <!-- <div class="list-container">
+    <div class="todo-container column-container">
+      <div class="list">
+        <h2>Task List</h2>
+        <mat-card *ngFor="let task of taskList">
+          <mat-card-header>
+            <mat-card-title>{{task.taskName}}</mat-card-title>
+            <mat-card-subtitle>{{task.taskDescription}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </div>
+  
+    <div class="done-container column-container">
+      <div class="list">
+        <h2>User List</h2>
+        <mat-card *ngFor="let user of userList">
+          <mat-card-header>
+            <mat-card-title>{{user.firstName}}{{user.lastName}}</mat-card-title>
+            <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+  <!--new One -->
+
+  <!-- <div class="drap-copy">
+    <div>
+      <ul
+        class="menu"
+        cdkDropList
+        #menuList="cdkDropList"
+        [cdkDropListData]="taskList"
+    
+        (cdkDropListDropped)="drop($event)"
+
+      >
+        <li class="item" *ngFor="let item of taskList" cdkDrag  cdkDragHandle>
+          <div class="item" *cdkDragPlaceholder cdkDragHandle>
+            <a>{{ item.taskDescription }}</a>
+          </div>
+          <a>{{ item.taskName }}</a>
+        </li>
+      </ul>
+    </div>
+  
+    <div
+      class="table"
+      cdkDropList
+      #tableList="cdkDropList"
+      [cdkDropListData]="userList"
+      [cdkDropListConnectedTo]="[menuList]"
+      (cdkDropListDropped)="drop($event)"
+      (cdkDropListExited)="exited($event)"
+      (cdkDropListEntered)="entered()"
+      cdkDropListSortingDisabled
+    >
+      <div class="content">
+        <div>
+          <div class="item1" *ngFor="let item of userList; let idx = index" cdkDrag [cdkDragData]="item">
+            <p>{{ idx }}--{{ item.firstName }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+
+  <!--last-->
+  <div cdkDropListGroup>
+    <div class="example-container">
+      <h2>Task List</h2>
+  
+      <div
+        cdkDropList
+        [cdkDropListData]="taskList"
+        class="example-list"
+        (cdkDropListDropped)="drop1($event)">
+        <div class="example-box" *ngFor="let item of taskList" cdkDrag>{{item.taskName}}</div>
+      </div>
+
+    </div>
+  
+    <div class="example-container">
+      <h2>User List</h2>
+  
+      <div
+        cdkDropList
+        [cdkDropListData]="userList"
+        class="example-list"
+        (cdkDropListDropped)="drop1($event)">
+        <div class="example-box" *ngFor="let item of userList" cdkDrag>{{item.firstName}}</div>
+      </div>
+      
+    </div>
+  </div>

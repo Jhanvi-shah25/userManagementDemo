@@ -8,7 +8,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="editUserProfileForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="editUserProfileForm">
             <div class="form-group">
                 <label for="fileInput" id="imagefileuploading">
                     <img *ngIf="this.isImg == true && this.url !=''" width="100" height="100"
@@ -97,11 +97,11 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block mb-4">
-            Add User
+          <button type="submit" class="btn btn-primary btn-block mb-4" (click)="onSubmit()">
+            Update
           </button>
           &nbsp;
-          <button [routerLink]="['/dashboard']" type="submit" class="btn btn-danger btn-block mb-4" >
+          <button (click)="cancel()" type="cancel" class="btn btn-danger btn-block mb-4" >
             Cancel
           </button>
         </form>
