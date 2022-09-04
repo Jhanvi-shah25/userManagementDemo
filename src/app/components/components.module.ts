@@ -16,6 +16,7 @@ import {ModalModule} from 'ngx-bootstrap/modal';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { AssigntaskComponent } from './assigntask/assigntask.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule }  from '@angular/material/card';
 
 
@@ -42,7 +43,8 @@ import { MatCardModule }  from '@angular/material/card';
       BrowserAnimationsModule,
       RouterModule,
       MatCardModule,
-      ModalModule.forRoot()
+      ModalModule.forRoot(),
+      // MatExpansionModule
   ],
   schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
