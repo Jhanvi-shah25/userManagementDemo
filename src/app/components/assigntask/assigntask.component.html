@@ -1,187 +1,46 @@
+
 <app-header></app-header>
 
+<!--accordian-->
 
-<!--task list-->
-  <!-- <div class="list-container">
-    <div class="todo-container column-container">
-      <div class="list">
-        <h2>Task List</h2>
-        <mat-card *ngFor="let task of taskList">
-          <mat-card-header>
-            <mat-card-title>{{task.taskName}}</mat-card-title>
-            <mat-card-subtitle>{{task.taskDescription}}</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      </div>
-    </div>
-  
-    <div class="done-container column-container">
-      <div class="list">
-        <h2>User List</h2>
-        <mat-card *ngFor="let user of userList">
-          <mat-card-header>
-            <mat-card-title>{{user.firstName}}{{user.lastName}}</mat-card-title>
-            <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      </div>
-    </div>
-  </div> -->
-
-
-
-
-  <!--new One -->
-
-  <!-- <div class="drap-copy">
-    <div>
-      <ul
-        class="menu"
-        cdkDropList
-        #menuList="cdkDropList"
-        [cdkDropListData]="taskList"
-    
-        (cdkDropListDropped)="drop($event)"
-
-      >
-        <li class="item" *ngFor="let item of taskList" cdkDrag  cdkDragHandle>
-          <div class="item" *cdkDragPlaceholder cdkDragHandle>
-            <a>{{ item.taskDescription }}</a>
-          </div>
-          <a>{{ item.taskName }}</a>
-        </li>
-      </ul>
-    </div>
-  
-    <div
-      class="table"
-      cdkDropList
-      #tableList="cdkDropList"
-      [cdkDropListData]="userList"
-      [cdkDropListConnectedTo]="[menuList]"
-      (cdkDropListDropped)="drop($event)"
-      (cdkDropListExited)="exited($event)"
-      (cdkDropListEntered)="entered()"
-      cdkDropListSortingDisabled
-    >
-      <div class="content">
-        <div>
-          <div class="item1" *ngFor="let item of userList; let idx = index" cdkDrag [cdkDragData]="item">
-            <p>{{ idx }}--{{ item.firstName }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-
-
-
-
-  <!--last-->
-  <div cdkDropListGroup>
-    <div class="example-container">
-      <h2>Task List</h2>
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="taskList"
-        class="example-list"
-        (cdkDropListDropped)="drop1($event)">
-        <div class="example-box" *ngFor="let item of taskList" cdkDrag>{{item.taskName}}</div>
-      </div>
-
-    </div>
-  
-    <div class="example-container">
-      <h2>User List</h2>
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="userList"
-        class="example-list"
-        (cdkDropListDropped)="drop1($event)">
-        <div class="example-box" *ngFor="let item of userList" cdkDrag>{{item.firstName}}</div>
-      </div>
-      
-    </div>
-  </div>
-
-  <!--check uncheck-->
-
-   <!-- <tbody *ngIf="associateUsersWithBankDetails.length!=0; else UserSearchEmpty">
-                        <tr *ngFor="let users of associateUsersWithBankDetails ; let i = index">
-                            <th scope="row">{{(prevPageSize *((currentPage+1)-1)+(i+1))}}</th>
-                            <td>
-                                <mat-checkbox #checkbox (change)='showOptions($event,users?.id)'
-                                id={{users?.id}} [checked] = "toggleCheckBox(users.id)">
-                                </mat-checkbox>
-                            </td>
-
-                            <td><img class="nameCircle" *ngIf="users['isProfile']"
-                                    [src]="'auth/file/view?fileKey='+users?.profileUrl | profileImg | async">
-                                <span *ngIf="!users['isProfile']" class="nameCircle">{{ users['profile']
-                                    }}</span>{{users?.firstName}} {{users?.lastName}}
-                            </td>
-                            <td>{{users?.title}}</td>
-                            <td>{{users?.email}}</td>
-                            <td *ngIf="users?.phone==null">-</td>
-                            <td *ngIf="users?.phone!=null">+1 {{users.phone | slice:0:3}}-{{users.phone |
-                                slice:3:6}}-{{users.phone|
-                                slice:6:10}}</td>
-                            <td>{{users?.registrationDate | date:'MM/dd/yyyy'}}</td>
-                        </tr>
-                    </tbody> -->
-
-
-
-<!--accordian
--->
-
-
-<!-- <mat-accordion
-  [multi]="true"
-  cdkDropListGroup
-  cdkDropList
-  [cdkDropListData]="nestedArray"
-  (cdkDropListDropped)="dropItem($event)"
->
+<mat-accordion [multi]="true" cdkDropListGroup cdkDropList [cdkDropListData]="nestedArray" (cdkDropListDropped)="dropItem($event)">
   <div *cdkDragPlaceholder></div>
-  <mat-expansion-panel
-    cdkDrag
-    [cdkDragData]="parent"
-    class="expansion-bg mat-elevation-z0 cursor-move example-list"
-    *ngFor="let parent of nestedArray; let i = index"
-    #chapterExpansionPanel
-    (mouseenter)="mouseEnterHandler($event, chapterExpansionPanel)"
-    [id]="idList"
-  >
+  
+  <mat-expansion-panel cdkDrag [cdkDragData]="parent" class="expansion-bg mat-elevation-z0 cursor-move example-list"
+    *ngFor="let parent of nestedArray; let i = index" #chapterExpansionPanel
+    (mouseenter)="mouseEnterHandler($event, chapterExpansionPanel)" [id]="parent.id" cdkDropListSortingDisabled>
     <mat-expansion-panel-header class="cursor-move">
       <mat-panel-title>
-        <span class="accordion-header-span cursor-pointer example-box">{{
-          parent.title
-        }}</span>
+        <span class="accordion-header-span cursor-pointer example-box">
+          {{parent.title}}</span>
       </mat-panel-title>
     </mat-expansion-panel-header>
+
+
     <ng-container>
-      <div
-        cdkDropList
-        [id]="parent.id"
-        [cdkDropListData]="parent.child"
-        [cdkDropListConnectedTo]="idList"
-        class="item-list"
-        (cdkDropListDropped)="dropItem($event)"
-      >
+      <div cdkDropList [id]="parent.id" [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" class="item-list"
+        (cdkDropListDropped)="dropItem($event)">
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-        <div
-          class="item-box"
-          class="sub-lesson cursor-move"
-          *ngFor="let child of parent.child; let j = index"
-          cdkDrag
-        >
-          <span class="cursor-pointer example-box">{{ child.title }}</span>
+        <div class="item-box" class="sub-lesson cursor-move" *ngFor="let child of parent.child; let j = index" cdkDrag>
+          <span  class="cursor-pointer">{{ child.taskName }}</span>
+
+          <!--make separate drop area-->
+          <span  class="cursor-pointer">{{ child.firstName }}</span>
+          <div *ngIf="i==1" style="display:flex;flex-wrap:wrap" (cdkDropListDropped)="dropItem($event)" cdkDropListGroup>
+            <div cdkDropList [cdkDropListData]="parent.child"  [style.width]="child.width || '100%'">
+              <div class="example-box" cdkDrag [cdkDragData]="child" style="border: ridge;">
+                <!-- {{child.firstName}} -->
+              </div>
+            </div>
+          </div>
+          <!-- example-box -->
         </div>
       </div>
     </ng-container>
+  
+  
   </mat-expansion-panel>
-</mat-accordion> -->
+</mat-accordion>
+
+<br>
+<button class="btn btn-danger" style="margin-left: 210px;">Assign</button>

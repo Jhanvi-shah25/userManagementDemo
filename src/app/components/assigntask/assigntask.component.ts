@@ -1,5 +1,8 @@
-import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService, Request } from 'src/app/services/api.service';
 
 type IMenu = {
@@ -28,20 +31,49 @@ export class AssigntaskComponent implements OnInit {
   ];
   table: Array<IMenu> = [];
 
-  constructor(private apiService:ApiService) { }
 
-  ngOnInit(): void {
-    this.getAllTask();
-    this.getAllUsers();
+nestedArray :any = [{
+  "title" : "taskList",
+  "id" : '101',
+  "child" : []
+},{
+  "title" : "userList",
+  "id" : '102',
+  "child" : []
+}];
+
+idList : any= [];
+
+  constructor(private apiService:ApiService,private toaster:ToastrService,private router:Router) { }
+
+  // ngOnInit(): void {
+  //   this.getAllTask();
+  //   this.getAllUsers();
+  // }
+
+  async ngOnInit() {
+    await this.getAllTask();
+    console.log(this.taskList,this.userList)
+    console.log('see nested',this.nestedArray)
+    this.idList = this.nestedArray.map((parent:any) => { console.log('in id',parent); parent.id});
   }
 
-  getAllTask(){
+   getAllTask(){
     let request : Request = {
       path : 'task/getAll'
     }
-    this.apiService.get(request).subscribe((response:any)=>{
-      this.taskList = response;
-      console.log('in task',response)
+    return new Promise((resolve)=>{
+      this.apiService.get(request).subscribe((response:any)=>{
+        this.taskList = response;
+        console.log(this.taskList)
+        for(let i=0;i<this.taskList.length;i++){
+         this.nestedArray[0]["child"] = this.taskList
+         console.log('nest inside',this.nestedArray)
+        }
+        this.getAllUsers();
+        console.log('in task',response ,'nest',this.nestedArray)
+      })
+      resolve(null);
     })
   }
 
@@ -51,59 +83,71 @@ export class AssigntaskComponent implements OnInit {
     }
     this.apiService.get(request).subscribe((response:any)=>{
       this.userList = response;
-      console.log(this.userList)
+      for(let i=0;i<this.userList.length;i++){
+        this.nestedArray[1]["child"] = this.userList;
+       }
+
+      console.log(this.userList,this.nestedArray)
     })
   }
 
 
 
-  drop(event: any) {
-    console.log(event.previousContainer,event.container)
-    if (event.previousContainer !== event.container) {
-      copyArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
-    if (event.previousContainer.data) {
-      this.menu = this.menu.filter((f) => !f.temp);
-    }
-  }
 
-  exited(event: any) {
-    const currentIdx = event.container.data.findIndex(
-      (f:any) => f.id === event.item.data.id
+dropItem(event:any) {
+  console.log('drop event',event)
+  if (event.container !== event.previousContainer) {
+    copyArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
     );
-    this.menu.splice(currentIdx + 1, 0, {
-      ...event.item.data,
-      temp: true,
-    });
+  } else {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
-  entered() {
-    this.menu = this.menu.filter((f) => !f.temp);
+}
+
+// entered(event: CdkDragEnter) {
+//   moveItemInArray(this., event.item.data, event.container.data);
+// }
+
+mouseEnterHandler(
+  event: MouseEvent,
+  chapterExpansionPanel: MatExpansionPanel
+) {
+  if (event.buttons && !chapterExpansionPanel.expanded) {
+    chapterExpansionPanel.open();
   }
+}
 
-  drop1(event: CdkDragDrop<string[]>) {
-    console.log(event.previousContainer,event.container)
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    // } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    // }
-  }
+assignTaskToUser(){
+    let request : any = {};
+    let objData = {
+      "userId" : "",
+      "taskId" : "",
+    }
+    request = {
+      path : 'task/assign/task',
+      data : objData
+    }
 
-
+    this.apiService.post(request).subscribe((response:any)=>{
+      console.log('response',response);
+      if(response["status"]["code"] === "Assigned"){
+        this.toaster.success(response["message"]);
+        this.router.navigate(['/taskDashboard']);
+      }
+      else{
+        this.toaster.error("Not assigned!");
+      }
+    })
+}
 
 
 }
@@ -134,86 +178,3 @@ export class AssigntaskComponent implements OnInit {
 
 
 //https://stackoverflow.com/questions/67337934/angular-nested-drag-and-drop-cdk-material-cdkdroplistgroup-cdkdroplist-nested
-
-
-
-
-
-// nestedArray = [
-//   {
-//     title: 'Parent 1',
-//     id: '1', // Make sure ID is in string as to attach it with cdkDropListConnectedTo we need it in string
-//     child: [
-//       {
-//         title: 'Child 11',
-//       },
-//       {
-//         title: 'Child 12',
-//       },
-//       {
-//         title: 'Child 13',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'Parent 2',
-//     id: '2',
-//     child: [
-//       {
-//         title: 'Child 21',
-//       },
-//       {
-//         title: 'Child 22',
-//       },
-//       {
-//         title: 'Child 23',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'Parent 3',
-//     id: '3',
-//     child: [
-//       {
-//         title: 'Child 31',
-//       },
-//       {
-//         title: 'Child 32',
-//       },
-//       {
-//         title: 'Child 33',
-//       },
-//     ],
-//   },
-// ];
-// idList = [];
-
-// ngOnInit() {
-//   this.idList = this.nestedArray.map((parent) => parent.id);
-// }
-
-// dropItem(event) {
-//   if (event.container === event.previousContainer) {
-//     moveItemInArray(
-//       event.container.data,
-//       event.previousIndex,
-//       event.currentIndex
-//     );
-//   } else {
-//     transferArrayItem(
-//       event.previousContainer.data,
-//       event.container.data,
-//       event.previousIndex,
-//       event.currentIndex
-//     );
-//   }
-// }
-
-// mouseEnterHandler(
-//   event: MouseEvent,
-//   chapterExpansionPanel: MatExpansionPanel
-// ) {
-//   if (event.buttons && !chapterExpansionPanel.expanded) {
-//     chapterExpansionPanel.open();
-//   }
-// }

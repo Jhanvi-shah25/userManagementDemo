@@ -18,6 +18,7 @@ import { AssigntaskComponent } from './assigntask/assigntask.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule }  from '@angular/material/card';
+import { ItemComponent } from './item/item.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { MatCardModule }  from '@angular/material/card';
     EditProfileComponent,
     UserDashboardComponent,
     AssigntaskComponent,
+    ItemComponent,
   ],
   imports: [
       MatMenuModule,
@@ -44,7 +46,7 @@ import { MatCardModule }  from '@angular/material/card';
       RouterModule,
       MatCardModule,
       ModalModule.forRoot(),
-      // MatExpansionModule
+      MatExpansionModule
   ],
   schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
