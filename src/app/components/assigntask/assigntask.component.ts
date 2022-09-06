@@ -22,18 +22,22 @@ export class AssigntaskComponent implements OnInit {
 
   taskList : any =[];
   userList : any =[];
-
-  menu: Array<IMenu> = [
-    { title: 'pork', price: 12, id: 1 },
-    { title: 'duck', price: 12, id: 2 },
-    { title: 'chicken', price: 12, id: 3 },
-    { title: 'beef', price: 12, id: 4 },
-    { title: 'soup', price: 12, id: 5 },
-  ];
-  table: Array<IMenu> = [];
+  userId : any =[];
+  taskId : string ="";
 
 
-nestedArray :any = [{
+
+  // menu: Array<IMenu> = [
+  //   { title: 'pork', price: 12, id: 1 },
+  //   { title: 'duck', price: 12, id: 2 },
+  //   { title: 'chicken', price: 12, id: 3 },
+  //   { title: 'beef', price: 12, id: 4 },
+  //   { title: 'soup', price: 12, id: 5 },
+  // ];
+  // table: Array<IMenu> = [];
+
+
+public nestedArray :any = [{
   "title" : "taskList",
   "id" : '101',
   "child" : []
@@ -42,6 +46,10 @@ nestedArray :any = [{
   "id" : '102',
   "child" : []
 }];
+
+public get connectedTo(): string[] {
+  return this.getIdsRecursive(this.nestedArray[1])
+}
 
 idList : any= [];
 
@@ -88,8 +96,9 @@ idList : any= [];
         this.taskList = response;
         console.log(this.taskList)
         for(let i=0;i<this.taskList.length;i++){
-         this.nestedArray[0]["child"] = this.taskList
-         console.log('nest inside',this.nestedArray)
+         this.nestedArray[0]["child"] = this.taskList;
+        //  this.nestedArray[1]["child"][i]["child"] = this.taskList;
+         console.log('nest inside',  this.nestedArray[1],this.nestedArray,this.nestedArray[1],this.nestedArray[1]["child"],this.nestedArray[1]["child"]["child"])
         }
         this.getAllUsers();
         console.log('in task',response ,'nest',this.nestedArray)
@@ -102,29 +111,47 @@ idList : any= [];
     let request : Request = {
       path : 'users/getAll'
     }
+    return new Promise((resolve)=>{
     this.apiService.get(request).subscribe((response:any)=>{
       this.userList = response;
       for(let i=0;i<this.userList.length;i++){
         this.nestedArray[1]["child"] = this.userList;
+        // this.nestedArray[1]["child"][i]["child"] = this.taskList;
        }
 
-      console.log(this.userList,this.nestedArray)
+      //  for(let i=0;i<this.taskList.length;i++){
+      //   this.nestedArray[1]["child"][i]["child"] = this.taskList;
+      //   console.log(this.nestedArray,'hihi')
+      //  }
+
+      console.log('nested array',this.nestedArray)
     })
+    resolve(null);
+    })
+
   }
 
 
 
 
 dropItem(event:any) {
-  console.log('drop event',event)
-  if (event.container !== event.previousContainer) {
-    copyArrayItem(
-      event.previousContainer.data,
+  console.log('drop event',event,event.item.dropContainer.id)
+  console.log('drop event1',event.container.connectedTo,event.container.id)
+  console.log('drop event2',event.previousContainer.connectedTo,event.previousContainer.id)
+  if (event.previousContainer !== event.container && event.item.dropContainer.id === event.previousContainer.id) {
+    console.log('in if')
+    // this.userId.push(event.container.id);
+    // this.taskId = event.item.dropContainer.id;
+    // console.log(this.userId,this.taskId,'www')
+    // let pData = "";
+    // let cData = "";
+    moveItemInArray(
       event.container.data,
       event.previousIndex,
       event.currentIndex
     );
   } else {
+    console.log('in else')
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,
@@ -136,6 +163,25 @@ dropItem(event:any) {
 
 // entered(event: CdkDragEnter) {
 //   moveItemInArray(this., event.item.data, event.container.data);
+// }
+
+// dropItem(event:any){
+//   console.log(event)
+//   if (event.previousContainer !== event.container) {
+//     copyArrayItem(
+//       event.previousContainer.data,
+//       event.container.data,
+//       event.previousIndex,
+//       event.currentIndex
+//     );
+//   } else {
+//     transferArrayItem(
+//       event.previousContainer.data,
+//       event.container.data,
+//       event.previousIndex,
+//       event.currentIndex
+//     );
+//   }
 // }
 
 mouseEnterHandler(
@@ -171,6 +217,38 @@ assignTaskToUser(){
 }
 
 
+//see
+onDragDrop = (event: any) => {
+  console.log(event,'ee')
+  if (event.previousContainer === event.container) {
+    moveItemInArray(
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  } else {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
+};
+
+private getIdsRecursive(item: any): string[] {
+  let ids : any =[];
+
+  if(item.child!=undefined){
+    item.child.forEach((childItem:any) => {
+      ids.push(childItem._id)
+      ids = ids.concat(this.getIdsRecursive(childItem));
+    });
+  }
+  return ids;
+}
+
+
 }
 
 
@@ -199,3 +277,6 @@ assignTaskToUser(){
 
 
 //https://stackoverflow.com/questions/67337934/angular-nested-drag-and-drop-cdk-material-cdkdroplistgroup-cdkdroplist-nested
+
+
+

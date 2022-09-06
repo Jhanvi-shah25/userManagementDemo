@@ -1,16 +1,14 @@
-<h1>jj</h1>
-<mat-card
-  cdkDrag
-  cdkDropList
-  [cdkDropListData]="child.child"
-  dragAndDropManager
-  [id]="child.id"
-  (cdkDropListDropped)="onDragDrop$.next($event)">
-  <mat-card-header>{{ child.firstName }}</mat-card-header>
-  <mat-card-content *ngFor="let child of child.child">
-      <app-item
-        [child]="child"
-        [onDragDrop]="onDragDrop$"
-      ></app-item>
-  </mat-card-content>
-</mat-card>
+<ng-container>
+  <div class="item" cdkDrag cdkDropList [id]="item.id" [cdkDropListData]="item.child"
+    [cdkDropListConnectedTo]="item.id" (cdkDropListDropped)="onDragDrop($event)">
+    <div>
+      [{{item.id}}] - {{item.firstName}}
+    </div>
+    <ng-container *ngFor="let nextItem of item.child">
+      <div class="sub-item">
+        <app-sub-item [item]="nextItem" [connectedTo]="item.id" (itemDrop)="onDragDrop($event)">
+        </app-sub-item>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
