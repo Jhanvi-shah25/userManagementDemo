@@ -9,6 +9,7 @@
   <mat-expansion-panel cdkDrag [cdkDragData]="parent" class="expansion-bg mat-elevation-z0 cursor-move example-list"
     *ngFor="let parent of nestedArray; let i = index" #chapterExpansionPanel
     (mouseenter)="mouseEnterHandler($event, chapterExpansionPanel)" [id]="parent.id" cdkDropListSortingDisabled>
+    
     <mat-expansion-panel-header class="cursor-move">
       <mat-panel-title>
         <span class="accordion-header-span cursor-pointer example-box">
@@ -17,26 +18,67 @@
     </mat-expansion-panel-header>
 
 
-    <ng-container>
+    <ng-container *ngIf="i==0">
+
       <div cdkDropList [id]="parent.id" [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" class="item-list"
         (cdkDropListDropped)="dropItem($event)">
-        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-        <div class="item-box" class="sub-lesson cursor-move" *ngFor="let child of parent.child; let j = index" cdkDrag>
-          <span  class="cursor-pointer">{{ child.taskName }}</span>
-
-          <!--make separate drop area-->
-          <span  class="cursor-pointer">{{ child.firstName }}</span>
-          <div *ngIf="i==1" style="display:flex;flex-wrap:wrap" (cdkDropListDropped)="dropItem($event)" cdkDropListGroup>
-            <div cdkDropList [cdkDropListData]="parent.child"  [style.width]="child.width || '100%'">
-              <div class="example-box" cdkDrag [cdkDragData]="child" style="border: ridge;">
-                <!-- {{child.firstName}} -->
-              </div>
+          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+            <div class="item-box" class="sub-lesson cursor-move" *ngFor="let child of parent.child; let j = index" cdkDrag>
+                <span  class="cursor-pointer">{{ child.taskName }}</span>
             </div>
-          </div>
-          <!-- example-box -->
-        </div>
       </div>
+
     </ng-container>
+
+    <ng-container *ngIf="i==1">
+      <!-- <div cdkDropList [id]="parent.id" [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" class="item-list"
+        (cdkDropListDropped)="dropItem($event)">
+          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+            <div class="item-box" [cdkDragData]="child" style="border: ridge;" class="sub-lesson cursor-move" *ngFor="let child of parent.child; let j = index" cdkDrag>
+                <span  class="cursor-pointer">{{ child.firstName }}</span>
+            </div>
+      </div> -->
+
+
+      <!-- //old -->
+      <!-- <mat-card *ngFor="let child of parent.child" style="border: ridge" cdkDropList [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" (cdkDropListDropped)="dropItem($event)" [style.width]="child.width || '100%'">
+        <mat-card-header>{{ child.firstName }}</mat-card-header>
+        <mat-card-content  *ngFor="let d of parent.child" cdkDrag>
+          
+          {{d.taskName}}
+        </mat-card-content>
+      </mat-card> -->
+
+
+      <!--new-->
+
+      <mat-card>
+        <!-- <mat-card-header> Nested Drag And Drop Cards</mat-card-header> -->
+        <mat-card-content cdkDropList dragAndDropManagerRoot [cdkDropListData]="parent.child"
+          (cdkDropListDropped)="dropItem($event)">
+          <ng-container *ngFor="let child of parent.child">
+            <!--second container-->
+            <mat-card cdkDrag cdkDropList [cdkDropListData]="parent.child" dragAndDropManager [id]="parent.id" (cdkDropListDropped)="dropItem($event)">
+                <mat-card-header>{{ child.firstName }}</mat-card-header>
+                    <mat-card-content *ngFor="let child of parent.child">
+                      {{child.taskName}}
+                    </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+
+
+    
+
+
+    
+    
+    
+    
+    
   
   
   </mat-expansion-panel>
@@ -44,3 +86,41 @@
 
 <br>
 <button class="btn btn-danger" style="margin-left: 210px;">Assign</button>
+
+
+<!-- https://stackblitz.com/edit/angular-cdk-nested-drag-drop-tree-structure-zrvnnj?file=src%2Fapp%2Fapp.component.ts -->
+
+
+
+<!-- <ng-container>
+  <div cdkDropList [id]="parent.id" [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" class="item-list"
+    (cdkDropListDropped)="dropItem($event)">
+    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+    <div class="item-box" class="sub-lesson cursor-move" *ngFor="let child of parent.child; let j = index" cdkDrag>
+      <span  class="cursor-pointer">{{ child.taskName }}</span>
+
+      
+      
+      <div *ngIf="i==1" style="display:flex;flex-wrap:wrap" >
+         <span  class="cursor-pointer">{{ child.firstName }}</span>
+        <div style="border: ridge" cdkDropList dragAndDropManagerRoot [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" (cdkDropListDropped)="dropItem($event)" [style.width]="child.width || '100%'"> -->
+           <!-- <div class="example-box" cdkDrag [cdkDragData]="child" style="border: ridge;">
+            {{child.firstName}}
+          </div>
+
+           <ng-container>
+            <mat-card  style="border: ridge" cdkDropList [cdkDropListData]="parent.child" [cdkDropListConnectedTo]="parent.id" (cdkDropListDropped)="dropItem($event)" [style.width]="child.width || '100%'">
+              <mat-card-header>{{ child.firstName }}</mat-card-header>
+              <mat-card-content  *ngFor="let d of parent.child" cdkDrag>
+                
+                {{d.taskName}}
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </div>
+      </div>
+
+
+    </div>
+</div>
+</ng-container> -->

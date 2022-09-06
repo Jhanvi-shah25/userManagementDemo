@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
 import { ApiService, Request } from 'src/app/services/api.service';
 
 type IMenu = {
@@ -44,6 +45,8 @@ nestedArray :any = [{
 
 idList : any= [];
 
+// public onDragDrop$ = new Subject<CdkDragDrop<Array<any>>>();
+
   constructor(private apiService:ApiService,private toaster:ToastrService,private router:Router) { }
 
   // ngOnInit(): void {
@@ -56,7 +59,25 @@ idList : any= [];
     console.log(this.taskList,this.userList)
     console.log('see nested',this.nestedArray)
     this.idList = this.nestedArray.map((parent:any) => { console.log('in id',parent); parent.id});
+    // this.onDragDrop$.subscribe(this.onDragDrop);
   }
+
+  // private onDragDrop = (event: CdkDragDrop<Array<any>>) => {
+  //   if (event.container === event.previousContainer) {
+  //     moveItemInArray(
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+  //   } else {
+  //     transferArrayItem(
+  //       event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex
+  //     );
+  //   }
+  // };
 
    getAllTask(){
     let request : Request = {
