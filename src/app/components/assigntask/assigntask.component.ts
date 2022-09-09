@@ -6,13 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { ApiService, Request } from 'src/app/services/api.service';
 
-type IMenu = {
-  title: string;
-  id: number;
-  price: number;
-  temp?: boolean;
-};
-
 @Component({
   selector: 'app-assigntask',
   templateUrl: './assigntask.component.html',
@@ -24,18 +17,8 @@ export class AssigntaskComponent implements OnInit {
   userList : any =[];
   userId : any =[];
   taskId : string ="";
-
-
-
-  // menu: Array<IMenu> = [
-  //   { title: 'pork', price: 12, id: 1 },
-  //   { title: 'duck', price: 12, id: 2 },
-  //   { title: 'chicken', price: 12, id: 3 },
-  //   { title: 'beef', price: 12, id: 4 },
-  //   { title: 'soup', price: 12, id: 5 },
-  // ];
-  // table: Array<IMenu> = [];
-
+  addedTaskArray : any =[]
+  singleTaskList = {};
 
 public nestedArray :any = [{
   "title" : "taskList",
@@ -44,7 +27,10 @@ public nestedArray :any = [{
 },{
   "title" : "userList",
   "id" : '102',
-  "child" : []
+  "child" : [{
+    "id":"103",
+    "child":[]
+  }]
 }];
 
 public get connectedTo(): string[] {
@@ -87,6 +73,16 @@ idList : any= [];
   //   }
   // };
 
+  getSingleTaskList(taskid : string){
+    console.log(taskid);
+    let request : Request = {
+      path : 'task/getSingleTask/' + taskid
+    }
+    this.apiService.get(request).subscribe((response:any)=>{
+      this.singleTaskList = response;
+    })
+  }
+
    getAllTask(){
     let request : Request = {
       path : 'task/getAll'
@@ -116,7 +112,7 @@ idList : any= [];
       this.userList = response;
       for(let i=0;i<this.userList.length;i++){
         this.nestedArray[1]["child"] = this.userList;
-        // this.nestedArray[1]["child"][i]["child"] = this.taskList;
+        this.nestedArray[1]["child"][i]["child"] = [];
        }
 
       //  for(let i=0;i<this.taskList.length;i++){
@@ -129,36 +125,73 @@ idList : any= [];
     resolve(null);
     })
 
-  }
+  } 
 
 
 
 
 dropItem(event:any) {
-  console.log('drop event',event,event.item.dropContainer.id)
-  console.log('drop event1',event.container.connectedTo,event.container.id)
-  console.log('drop event2',event.previousContainer.connectedTo,event.previousContainer.id)
-  if (event.previousContainer !== event.container && event.item.dropContainer.id === event.previousContainer.id) {
-    console.log('in if')
+  console.log('drop event',event,event.item.dropContainer.id,event.container.data)
+  if (event.previousContainer !== event.container) {
+
+    console.log('in if',event.container.data[0])
+    event.previousContainer.data.forEach((d:any,i:number)=>{
+      console.log(d,'data here')
+      if(d["_id"] === event.item.element.nativeElement.id){
+        console.log('matched!!')
+        this.userId.push(event.container.id);
+        var newArr = new Set(this.userId);
+        this.userId = [...newArr];
+        this.taskId = d["_id"];
+        console.log(i,d,'debug',this.nestedArray[1]["child"])
+        // this.nestedArray[1]["child"][event.currentIndex]["child"].push(d);
+        copyArrayItem(
+          event.previousContainer.data,
+          this.nestedArray[1]["child"][event.currentIndex]["child"],
+          event.previousIndex,
+          event.currentIndex
+        );
+      }
+    })
+    // for(let i=0;i<=event.previousContainer.data.length;i++){
+    //   if(event.previousContainer.data["_id"] === event.item.element.nativeElement.id){
+    //     console.log('matched!!')
+    //     this.userId.push(event.container.id);
+    //     this.taskId = event.previousContainer.data["_id"];
+    //     console.log(i,event.previousContainer.data,'debug')
+    //     this.nestedArray[1]["child"][i]["child"] = event.previousContainer.data;
+    //   }
+    // }
+    console.log(this.userId,this.taskId,'both here',this.nestedArray[1]);
+
+
     // this.userId.push(event.container.id);
     // this.taskId = event.item.dropContainer.id;
-    // console.log(this.userId,this.taskId,'www')
-    // let pData = "";
-    // let cData = "";
-    moveItemInArray(
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );
+    console.log(this.userId,this.taskId,'www',this.nestedArray[1]["child"][event.currentIndex]["child"])
+
   } else {
     console.log('in else')
     transferArrayItem(
       event.previousContainer.data,
-      event.container.data,
+      this.nestedArray[1]["child"][event.currentIndex]["child"],
       event.previousIndex,
       event.currentIndex
     );
   }
+  console.log('in vv',event.container.data[0])
+  // event.container.data.forEach((singleItem:any,i:any)=>{
+  //   if(singleItem["_id"] === event.item.element.nativeElement.id){
+  //     this.nestedArray[1]["child"]["child"][i] = singleItem;
+  //   }
+  // })
+  // for(let i=0;i<=event.container.data.length;i++){
+  //   console.log(event.container.data)
+  //   if(event.container.data[i]._id === event.container.id){
+  //     console.log('match')
+  //     this.nestedArray[1]["child"][i]["child"] = event.container.data[i];
+  //   }
+  // }
+  // console.log(this.nestedArray[1],'see new array')
 }
 
 // entered(event: CdkDragEnter) {
@@ -196,45 +229,26 @@ mouseEnterHandler(
 assignTaskToUser(){
     let request : any = {};
     let objData = {
-      "userId" : "",
-      "taskId" : "",
+      "userId" : this.userId,
+      "taskId" : this.taskId,
     }
     request = {
       path : 'task/assign/task',
       data : objData
     }
-
     this.apiService.post(request).subscribe((response:any)=>{
       console.log('response',response);
-      if(response["status"]["code"] === "Assigned"){
-        this.toaster.success(response["message"]);
+      if(response["status"]["code"] === "Assigned" && this.userId && this.taskId){
+        this.toaster.success(response["status"]["message"]);
         this.router.navigate(['/taskDashboard']);
       }
       else{
-        this.toaster.error("Not assigned!");
+        this.toaster.error("Please assign the task first");
       }
     })
 }
 
 
-//see
-onDragDrop = (event: any) => {
-  console.log(event,'ee')
-  if (event.previousContainer === event.container) {
-    moveItemInArray(
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );
-  } else {
-    transferArrayItem(
-      event.previousContainer.data,
-      event.container.data,
-      event.previousIndex,
-      event.currentIndex
-    );
-  }
-};
 
 private getIdsRecursive(item: any): string[] {
   let ids : any =[];
@@ -247,7 +261,6 @@ private getIdsRecursive(item: any): string[] {
   }
   return ids;
 }
-
 
 }
 
