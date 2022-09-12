@@ -14,6 +14,8 @@ import { RouterModule } from '@angular/router';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -29,7 +31,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     BrowserAnimationsModule,
     RouterModule,
     ToastrModule.forRoot(),
-    DragDropModule
+    DragDropModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

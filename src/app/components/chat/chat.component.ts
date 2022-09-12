@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ChatService, Message } from 'src/app/services/chat.service';
+import * as io from 'socket.io-client';
+
+
 
 @Component({
   selector: 'app-chat',
@@ -9,6 +12,7 @@ import { ChatService, Message } from 'src/app/services/chat.service';
 })
 export class ChatComponent implements OnInit {
   messages: Message[] = [];
+  socket:any;
   value: string = "";
 
 
@@ -17,6 +21,10 @@ export class ChatComponent implements OnInit {
 
 
   ngOnInit() {
+      // this.socket = io("http://localhost:3000", {transports: ['websocket'], secure: true})
+      // this.socket.on("chat",(d)=>{
+      //   console.log.o
+      // })
       this.chatService.conversation.subscribe((val:any) => {
       this.messages = this.messages.concat(val);
     });
