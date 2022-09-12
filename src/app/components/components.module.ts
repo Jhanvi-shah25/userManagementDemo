@@ -19,6 +19,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule }  from '@angular/material/card';
 import { ItemComponent } from './item/item.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ItemComponent } from './item/item.component';
     UserDashboardComponent,
     AssigntaskComponent,
     ItemComponent,
+    ChatComponent,
   ],
   imports: [
       MatMenuModule,

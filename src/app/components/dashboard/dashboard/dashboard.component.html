@@ -46,6 +46,8 @@
       <td>
         <button type="button" class="btn btn-link btn-sm"  (click)="editUserInformation(list?._id)">Edit</button>
         <button type="button" class="btn btn-link btn-sm" (click)="deleteUser(list?._id)">Delete</button>
+        &nbsp;
+        <img (click)="navigateToChat(list?._id)" style="cursor: pointer;" src="../../../../assets/Images/chatNew1.png" class="rounded-circle"/>
       </td>
     </tr>
   </tbody>

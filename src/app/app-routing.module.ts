@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddUsersComponent } from './components/add-users/add-users/add-users.component';
 import { AssigntaskComponent } from './components/assigntask/assigntask.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ChatComponent } from './components/chat/chat.component';
 import { DashboardComponent } from './components/dashboard/dashboard/dashboard.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { LoginComponent } from './components/login/login/login.component';
@@ -22,7 +23,8 @@ const routes: Routes = [
   {path:'change-password',component:ChangePasswordComponent},
   {path:'edit-profile',component:EditProfileComponent},
   {path:'user-dashboard',component:UserDashboardComponent},
-  {path:'assignTask',component:AssigntaskComponent}
+  {path:'assignTask',component:AssigntaskComponent},
+  {path:'chat',component:ChatComponent}
 ];
 
 @NgModule({

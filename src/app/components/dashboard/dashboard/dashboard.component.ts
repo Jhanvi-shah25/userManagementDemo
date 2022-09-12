@@ -75,6 +75,14 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  navigateToChat(id:string){
+    this.router.navigate(['/chat'],{
+      queryParams : {
+        id : id
+      }
+    });
+  }
+
   logOut(){
     this.authenticationService.logOut()
   }
