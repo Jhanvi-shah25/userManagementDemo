@@ -3,16 +3,29 @@
 
 
 <h1>Send your message</h1>
-<ng-container *ngFor="let message of messages">
+<!-- <ng-container *ngFor="let message of messages">
 <div class="message"
 [ngClass]="{ 'from': message.author === 'bot',
 'to': message.author === 'user' }">
 {{ message.content }}
 </div>
-</ng-container>
-<label *ngIf="messages.length == 0; else dialogInfo" for="nameField">Your message</label>
-<input [(ngModel)]="value" (keyup.enter)="sendMessage()" type="text">
+</ng-container> -->
+<!-- <label *ngIf="messages.length == 0; else dialogInfo" for="nameField">Your message</label> -->
+<!-- [(ngModel)]="value" -->
+<!-- <input  (keyup.enter)="sendMessage()" type="text">
 <button (click)="sendMessage()">Send</button>
 <ng-template #dialogInfo>
 <span [className]="'float-right'">Total messages: {{messages.length}}</span>
-</ng-template>
+</ng-template> -->
+
+
+<router-outlet></router-outlet>
+
+<div *ngFor="let message of messageList">
+    <li>
+        {{message}}
+    </li>  
+</div>
+
+<input [(ngModel)]="newMessage" (keyup)="$event.keyCode == 13 && sendMessage()" /><br> &nbsp;
+<button [disabled]="!newMessage" (click)="sendMessage()">Send Message</button>

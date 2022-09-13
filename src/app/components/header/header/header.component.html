@@ -49,6 +49,13 @@
           class="admin-edit-profile">Change
           Password</span></button>
       <hr>
+ 
+      <button *ngIf="!admin" mat-menu-item  id="AdminSignOut" [routerLink]="['/chat']"><img width="40"
+        height="40"
+        class="rounded-circle"
+        src="../../../../assets/Images/chatNew1.png"><span class="admin-edit-profile text-color">Chat with admin</span></button>
+
+       <hr *ngIf="!admin" > 
       <button mat-menu-item (click)="logOut()" id="AdminSignOut"><img class="img-before-mat-option"
           src="../../../../assets/Images/icon-signout.svg"><span class="admin-edit-profile text-color">Sign
           Out</span></button>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ApiService } from './services/api.service';
 import { AuthenticationService } from './services/authentication.service';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent {
   constructor(
     private router: Router,
     private authService: AuthenticationService,
+    private chatService:ChatService
   ) {
     console.log('see',this.authService.data,this.authService['data'],this.authService['data']['authDetail'])
     
@@ -50,4 +52,6 @@ export class AppComponent {
     //   window.scrollTo(0, 0)
     // });
  }
+
+
 }
