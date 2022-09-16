@@ -16,7 +16,6 @@ export class AppComponent {
   constructor(
     private router: Router,
     private authService: AuthenticationService,
-    private chatService:ChatService
   ) {
     console.log('see',this.authService.data,this.authService['data'],this.authService['data']['authDetail'])
     

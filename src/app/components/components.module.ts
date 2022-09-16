@@ -20,6 +20,7 @@ import {MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule }  from '@angular/material/card';
 import { ItemComponent } from './item/item.component';
 import { ChatComponent } from './chat/chat.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 @NgModule({
@@ -42,7 +43,7 @@ import { ChatComponent } from './chat/chat.component';
       ReactiveFormsModule,
       FormsModule,
       DataTablesModule,
-      BrowserAnimationsModule,
+      BrowserModule,
       DragDropModule,
       BrowserAnimationsModule,
       RouterModule,
