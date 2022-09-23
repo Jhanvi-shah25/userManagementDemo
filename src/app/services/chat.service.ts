@@ -2,34 +2,39 @@ import { Injectable } from '@angular/core';
 import {  Observable, Subject } from 'rxjs';
 import {io} from 'socket.io-client';
 
-export class Message {
-  constructor(public author: string, public content: string) {}
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
-  conversation = new Subject<Message[]>();
   
-  messageMap = {
-    "Hi": "Hello",
-    "Who are you": "My name is Agular Bot",
-    "What is Angular": "Angular is the best framework ever",
-    "default": "I can't understand. Can you please repeat"
-  }
-
   socket: any;
   id : string ="";
 
   constructor() {
+    let obj = this;
     this.socket = io('http://localhost:3001');
     this.socket.on('connected', function() {
-        console.log("connected !");
+        console.log("connected !",obj);
+        console.log('socket id',obj.socket.id,obj.socket.connected);
+        
     });
-    console.log(this.socket,'here')
+
+    console.log('socket',this.socket)
+
+    // this.socket.on('getid',function(data:any,data1:any){
+    //   console.log(data,data.connected,data1)
+    // })
+
+    // this.socket.on('disconnected',function(){
+    //   console.log('disconnected!!')
+    //   console.log('socket id diconnected',obj.socket.id);
+    // })
+    // console.log('socket id',this.socket.id)
     this.id = this.socket.id;
+  }
+
+  getConnectedUserWithSocket(){
+    return this.socket;
   }
 
   listen(eventName: string) {
@@ -39,6 +44,14 @@ export class ChatService {
         subscriber.next(data);
       })
     });
+  }
+
+  getConenctedId(){
+    this.socket.on('getid',(data:any) =>{
+      console.log('connected user id',this.socket.id,data,data.connected,this.socket.connected);
+      this.id = data;
+    })
+    return this.id;
   }
 
   emit(eventName: string, data:any) {
@@ -54,34 +67,32 @@ export class ChatService {
     return Observable.create((observer:any) => {
       console.log('1',observer)
             this.socket.on('msgToClient', (message:any) => {
-              console.log(message,'2')
+              console.log(message,'2');
                 observer.next(message);
             });
     });
 
   } 
+  public getOldMessages = () => {
+    return new Observable((observer:any) => {
+            this.socket.on('findAllMessage', (message:any) => {
+              console.log(message,'2')
+                observer.next(message);
+            });
+    });
+
+  }
+
+  public isConnected = () => {
+    return Observable.create((obs:any)=>{
+      this.socket.on('isConnect',(msg:any)=>{
+        console.log(msg,'from isconnected!!!!')
+        obs.next(msg);
+      })
+    })
+  }
+
   ngAfterViewInit(){
     console.log('in view')
-  }
-
-
-
-  //For design part
-
-
-  getBotAnswer(msg: string) {
-    console.log(msg,'llllllll')
-    const userMessage = new Message('user', msg);  
-    this.conversation.next([userMessage]);
-    const botMessage = new Message('bot', this.getBotMessage(msg));
-    
-    setTimeout(()=>{
-      this.conversation.next([botMessage]);
-    }, 1500);
-  }
-
-  getBotMessage(question: string){
-    let answer = question;
-    return answer || this.messageMap['default'];
   }
 }
